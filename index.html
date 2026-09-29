@@ -1,1 +1,349 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>کاورتوو | لیست قیمت</title>
+
+  <!-- فونت وزیرمتن -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- فونت آیکون FontAwesome برای قفل و سبد خرید -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary: #7A764D;          /* رنگ اختصاصی شما */
+      --primary-light: #A39E66;    /* رنگ مکمل روشن‌تر برای افکت نئونی */
+      --bg-body: #FDFDF9;
+      --card-bg: #ffffff;
+      --text-main: #232323;
+      --text-sub: #555555;
+      --glow: 0 0 20px rgba(122, 118, 77, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      direction: rtl;
+      padding: 16px;
+    }
+
+    .app-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card-bg);
+      border-radius: 36px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.07);
+      padding: 42px 28px;
+      text-align: center;
+      position: relative;
+      border: 1px solid rgba(122, 118, 77, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    /* ─── استایل‌های مرحله اول: صفحه ورود با قفل ─── */
+    #view-login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .lock-wrapper {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      background: linear-gradient(135deg, rgba(122, 118, 77, 0.08), rgba(163, 158, 102, 0.08));
+      border: 2px solid var(--primary);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 22px;
+      box-shadow: var(--glow);
+      animation: pulseGlow 2.5s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 12px rgba(122, 118, 77, 0.3);
+        transform: translateY(0);
+      }
+      100% {
+        box-shadow: 0 0 25px rgba(122, 118, 77, 0.6);
+        transform: translateY(-4px);
+      }
+    }
+
+    .lock-wrapper i {
+      font-size: 2.3rem;
+      color: var(--primary);
+      filter: drop-shadow(0 2px 6px rgba(122, 118, 77, 0.4));
+    }
+
+    .brand-heading {
+      font-size: 1.95rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .sub-text {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 26px;
+      font-weight: 500;
+    }
+
+    .form-group {
+      width: 100%;
+    }
+
+    .code-box {
+      width: 100%;
+      height: 52px;
+      border: 2px solid var(--primary);
+      border-radius: 16px;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      outline: none;
+      background: #ffffff;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .code-box:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 15px rgba(163, 158, 102, 0.35);
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, var(--primary), #5f5c3c);
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 22px rgba(122, 118, 77, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .error-tag {
+      color: #d90429;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ─── استایل‌های مرحله دوم: لودینگ نئونی با سبد خرید ─── */
+    #view-loading {
+      display: none; /* در ابتدا مخفی است */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .cart-header h2 {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .cart-header .cart-icon {
+      font-size: 1.85rem;
+      color: var(--primary-light);
+      filter: drop-shadow(0 2px 8px rgba(122, 118, 77, 0.35));
+      animation: bounce 1.6s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .progress-track {
+      width: 100%;
+      max-width: 260px;
+      height: 8px;
+      background: rgba(122, 118, 77, 0.12);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      border-radius: 20px;
+      box-shadow: 0 0 14px var(--primary);
+      transition: width 0.05s linear;
+    }
+
+    .status-text {
+      font-size: 1rem;
+      color: var(--text-sub);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .percent-number {
+      font-weight: 800;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+
+    <!-- مرحله ۱: صفحه ورود با قفل نئونی -->
+    <div id="view-login">
+      <div class="lock-wrapper">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+
+      <div class="brand-heading">کاورتوو</div>
+      <div class="sub-text">برای مشاهده لیست قیمت، رمز عبور را وارد کنید.</div>
+
+      <form class="form-group" onsubmit="processLogin(event)">
+        <input 
+          type="tel" 
+          id="passInput" 
+          class="code-box" 
+          placeholder="رمز عبور" 
+          inputmode="numeric" 
+          autocomplete="off"
+        />
+        <button type="submit" class="btn-submit">
+          <span>ورود به لیست قیمت</span>
+          <i class="fa-solid fa-lock"></i>
+        </button>
+      </form>
+
+      <div id="errorBox" class="error-tag">رمز عبور نادرست است.</div>
+    </div>
+
+    <!-- مرحله ۲: صفحه لودینگ با سبد خرید و درصد -->
+    <div id="view-loading">
+      <div class="cart-header">
+        <h2>کاورتوو</h2>
+        <i class="fa-solid fa-cart-shopping cart-icon"></i>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+
+      <div class="status-text">
+        <span>در حال بارگذاری...</span>
+        <span class="percent-number" id="percentTxt">۰٪</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 🔑 رمز عبور ورود:
+    const VALID_CODE = "95";
+
+    // 🔗 آدرس لینک نهایی IAM را داخل کوتیشن زیر قرار بده:
+    const IAM_REDIRECT_LINK = "https://iam.inoti.com/";
+
+    function toPersianDigits(n) {
+      const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      return n.toString().replace(/\d/g, x => farsiDigits[x]);
+    }
+
+    function processLogin(event) {
+      event.preventDefault();
+      const enteredCode = document.getElementById("passInput").value.trim();
+      const errorElem = document.getElementById("errorBox");
+
+      if (enteredCode === VALID_CODE) {
+        errorElem.style.display = "none";
+        
+        // رفتن از صفحه ورود به صفحه لودینگ
+        document.getElementById("view-login").style.display = "none";
+        document.getElementById("view-loading").style.display = "flex";
+
+        // شروع انیمیشن لودینگ از ۰ تا ۱۰۰ درصد
+        const progressBar = document.getElementById("progressBar");
+        const percentTxt = document.getElementById("percentTxt");
+        let progress = 0;
+        const duration = 2400; // ۲.۴ ثانیه لودینگ
+        const intervalTime = 25;
+        const increment = 100 / (duration / intervalTime);
+
+        const timer = setInterval(() => {
+          progress += increment;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(timer);
+
+            // ریدایرکت مستقیم به لینک IAM
+            setTimeout(() => {
+              window.location.href = IAM_REDIRECT_LINK;
+            }, 300);
+          }
+
+          const currentInt = Math.floor(progress);
+          progressBar.style.width = currentInt + "%";
+          percentTxt.innerText = toPersianDigits(currentInt) + "٪";
+        }, intervalTime);
+
+      } else {
+        errorElem.style.display = "block";
+      }
+    }
+  </script>
+
+</body>
+</html>
 
